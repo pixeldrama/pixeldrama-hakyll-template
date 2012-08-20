@@ -1,16 +1,39 @@
 body {
+    color: #333;
+    font-family: helvetica,arial,freesans,clean,sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4 {
+    font-weight: normal;
+    border-bottom: 1px solid #DDD;
+}
+
+
+#navigation, #text_wrapper {
     width: 600px;
+    line-height: 1.4;
     margin: 0px auto 0px auto;
 }
 
-div#navigation {
+#navigation {
+    font-size: 15px;
+}
+
+div#nav_wrapper {
     text-align: left;
-    border-bottom: 4px solid black;
+    background: #f4f4f4;
+    border-bottom: 1px solid #DDD;
+}
+
+#nav_wrapper h1 {
+    display:none
 }
 
 div#navigation a {
-    color: black;
+    color: #333;
     text-decoration: none;
-    padding: 3px 10px 3px 10px;
-    margin: 0px 10px 0px 10px;
+    padding: 3px 0px;
+    margin: 0px 20px 0px 0px;
 }

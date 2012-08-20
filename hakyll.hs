@@ -31,7 +31,7 @@ main = hakyll $ do
         >>> applyTemplateCompiler "templates/posts.html"
         >>> applyTemplateCompiler "templates/default.html"
         >>> relativizeUrlsCompiler
-        
+
     -- Render blog
     match "blog.html" $ route idRoute
     create "blog.html" $ constA mempty
@@ -48,7 +48,7 @@ main = hakyll $ do
         >>> applyTemplateCompiler "templates/index.html"
         >>> applyTemplateCompiler "templates/default.html"
         >>> relativizeUrlsCompiler
-        
+
     -- about
     match "about.html" $ route idRoute
     create "about.html" $ constA mempty
@@ -57,7 +57,10 @@ main = hakyll $ do
         >>> applyTemplateCompiler "templates/default.html"
         >>> relativizeUrlsCompiler
 
-
+    -- images
+    match "images/*" $ do
+      route idRoute
+      compile copyFileCompiler
     -- Read templates
     match "templates/*" $ compile templateCompiler
 
