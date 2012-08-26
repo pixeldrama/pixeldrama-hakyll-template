@@ -1,0 +1,7 @@
+---
+title: Hakyll
+author: Benjamin Weißenfels
+date: August 26, 2012
+---
+
+Dieser Blog wird jetzt mit [hakyll](http://jaspervdj.be/hakyll/)  gefahren
