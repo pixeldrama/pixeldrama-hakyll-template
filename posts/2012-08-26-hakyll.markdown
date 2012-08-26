@@ -4,4 +4,7 @@ author: Benjamin Weißenfels
 date: August 26, 2012
 ---
 
-Dieser Blog wird jetzt mit [hakyll](http://jaspervdj.be/hakyll/)  gefahren
+Dieser Blog wird jetzt mit [hakyll](http://jaspervdj.be/hakyll/)
+gefahren. Gründe sind die zu hohe Updatefrequenz von Wordpress, die
+höhere Performance und die Sicherheit, sowie den viel geringeren
+Pflegeaufwand. Und nicht zuletzt ist Hakyll in Haskell geschrieben.
