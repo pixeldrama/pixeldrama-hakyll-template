@@ -39,6 +39,10 @@ div#navigation a, div#footer a {
     margin: 0px 20px 0px 0px;
 }
 
+div#text_wrapper {
+    font-size: 14px;
+}
+
 div#footer a {
     margin: 0px;
 }
