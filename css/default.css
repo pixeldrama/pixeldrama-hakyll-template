@@ -43,6 +43,7 @@ div#navigation a, div#footer a {
 
 div#text_wrapper {
     font-size: 14px;
+    line-height: 1.6;
 }
 
 div#footer a {
