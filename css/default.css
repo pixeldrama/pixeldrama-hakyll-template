@@ -11,6 +11,9 @@ h1, h2, h3, h4 {
     border-bottom: 1px solid #DDD;
 }
 
+a {
+    color: #00B4F0;
+}
 
 #navigation, #text_wrapper, #footer {
     width: 600px;
@@ -33,7 +36,6 @@ div#nav_wrapper {
 }
 
 div#navigation a, div#footer a {
-    color: #00B4F0;
     text-decoration: none;
     padding: 3px 0px;
     margin: 0px 20px 0px 0px;
