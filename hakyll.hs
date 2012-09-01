@@ -47,8 +47,8 @@ main = hakyll $ do
         >>> applyTemplateCompiler "templates/default.html"
         >>> relativizeUrlsCompiler
 
-    -- images
-    match "images/*" $ do
+    -- images and files
+    match (list ["images/*", "files/*"]) $ do
       route idRoute
       compile copyFileCompiler
 
