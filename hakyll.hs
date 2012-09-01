@@ -36,24 +36,14 @@ main = hakyll $ do
     match "blog.html" $ route idRoute
     create "blog.html" $ constA mempty
       >>> arr (setField "title" "Blog")
-      >>> requireAllA "posts/*" (id *** arr (take 5 . reverse . sortByBaseName) >>> addPostList)
+      >>> requireAllA "posts/*" (id *** arr (take 5 . reverse . chronological) >>> addPostList)
       >>> applyTemplateCompiler "templates/blog.html"
       >>> applyTemplateCompiler "templates/default.html"
       >>> relativizeUrlsCompiler
 
-    -- Index
-    match "index.html" $ route idRoute
-    create "index.html" $ constA mempty
-        >>> arr (setField "title" "Home")
-        >>> applyTemplateCompiler "templates/index.html"
-        >>> applyTemplateCompiler "templates/default.html"
-        >>> relativizeUrlsCompiler
-
-    -- about
-    match "about.html" $ route idRoute
-    create "about.html" $ constA mempty
-        >>> arr (setField "title" "About")
-        >>> applyTemplateCompiler "templates/about.html"
+    match "pages/*.markdown" $ do
+      route $ gsubRoute "pages/" (const "") `composeRoutes` setExtension "html"
+      compile $ pageCompiler
         >>> applyTemplateCompiler "templates/default.html"
         >>> relativizeUrlsCompiler
 
@@ -61,15 +51,15 @@ main = hakyll $ do
     match "images/*" $ do
       route idRoute
       compile copyFileCompiler
+
     -- Read templates
     match "templates/*" $ compile templateCompiler
 
 -- | Auxiliary compiler: generate a post list from a list of given posts, and
 -- add it to the current page under @$posts@
---
 addPostList :: Compiler (Page String, [Page String]) (Page String)
 addPostList = setFieldA "posts" $
-    arr (reverse . sortByBaseName)
+    arr (reverse . chronological)
         >>> require "templates/postitem.html" (\p t -> map (applyTemplate t) p)
         >>> arr mconcat
         >>> arr pageBody
