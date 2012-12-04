@@ -2,6 +2,7 @@
 title: Hakyll
 author: Benjamin Weißenfels
 date: August 26, 2012
+description: first post with hakyll
 ---
 
 Dieser Blog wird jetzt mit [hakyll](http://jaspervdj.be/hakyll/)

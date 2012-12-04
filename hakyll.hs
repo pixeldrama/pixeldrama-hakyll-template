@@ -56,9 +56,23 @@ main = hakyll $ do
       route idRoute
       compile copyFileCompiler
 
+    match "rss.xml" $ route idRoute
+    create "rss.xml" $ requireAll_ "posts/*" >>> renderRss feedConfiguration
 
     -- Read templates
     match "templates/*" $ compile templateCompiler
+
+
+
+feedConfiguration :: FeedConfiguration
+feedConfiguration = FeedConfiguration
+    { feedTitle = "pixeldrama - a blog"
+    , feedDescription = "blog of Benjamin Weißenfels"
+    , feedAuthorName = "Benjamin Weißenfels"
+    , feedAuthorEmail = "b.pixeldrama@gmail.com"
+    , feedRoot = "http://pixeldrama.de"
+    }
+
 
 -- | Auxiliary compiler: generate a post list from a list of given posts, and
 -- add it to the current page under @$posts@
