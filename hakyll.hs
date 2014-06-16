@@ -1,52 +1,57 @@
+{-# LANGUAGE Arrows            #-}
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import Prelude hiding (id)
-import Control.Category (id)
-import Control.Arrow ((>>>), (***), arr)
-import Data.Monoid (mempty, mconcat)
-
+import Data.Monoid ((<>), mappend, mconcat)
 import Hakyll
 
 main :: IO ()
 main = hakyll $ do
+  
     -- Compress CSS
     match "css/*" $ do
         route   idRoute
         compile compressCssCompiler
 
-    -- Render posts
-    match "posts/*" $ do
-        route   $ setExtension ".html"
-        compile $ pageCompiler
-            >>> applyTemplateCompiler "templates/post.html"
-            >>> applyTemplateCompiler "templates/default.html"
-            >>> relativizeUrlsCompiler
-
-    -- Render posts list
-    match "posts.html" $ route idRoute
-    create "posts.html" $ constA mempty
-        >>> arr (setField "title" "All posts")
-        >>> requireAllA "posts/*" addPostList
-        >>> applyTemplateCompiler "templates/posts.html"
-        >>> applyTemplateCompiler "templates/default.html"
-        >>> relativizeUrlsCompiler
-
-    -- Render blog
-    match "blog.html" $ route idRoute
-    create "blog.html" $ constA mempty
-      >>> arr (setField "title" "Blog")
-      >>> requireAllA "posts/*" (id *** arr (take 5 . reverse . chronological) >>> addPostList)
-      >>> applyTemplateCompiler "templates/blog.html"
-      >>> applyTemplateCompiler "templates/default.html"
-      >>> relativizeUrlsCompiler
-
     match "pages/*.markdown" $ do
       route $ gsubRoute "pages/" (const "") `composeRoutes` setExtension "html"
-      compile $ pageCompiler
-        >>> applyTemplateCompiler "templates/default.html"
-        >>> relativizeUrlsCompiler
+      compile $ pandocCompiler
+        >>= loadAndApplyTemplate "templates/default.html" defaultContext
+        >>= relativizeUrls
 
+    match "posts/*" $ do
+      route $ setExtension ".html"
+      compile $ do
+        pandocCompiler
+          >>= saveSnapshot "content"
+          >>= return . fmap demoteHeaders
+          >>= loadAndApplyTemplate "templates/post.html" postCtx
+          >>= loadAndApplyTemplate "templates/default.html" defaultContext
+
+    create ["blog.html"] $ do
+      route idRoute
+      compile $ do
+        posts <- recentFirst =<< loadAll "posts/*"
+        let ctx = (listField "posts" postCtx (return posts)) <> postCtx
+        makeItem ""
+          >>= loadAndApplyTemplate "templates/blog.html" ctx
+          >>= loadAndApplyTemplate "templates/default.html" ctx
+          >>= relativizeUrls
+
+
+    create ["posts.html"] $ do
+      route idRoute
+      compile $ do
+        posts <- recentFirst =<< loadAll "posts/*"
+        let ctx = (listField "posts" postCtx (return posts)) <> postCtx
+        makeItem ""
+          >>= loadAndApplyTemplate "templates/postlist.html" ctx
+          >>= loadAndApplyTemplate "templates/default.html" ctx
+          >>= relativizeUrls
+    
+    -- read templates
+    match "templates/*" $ compile $ templateCompiler
+ 
     -- images
     match "images/*" $ do
       route idRoute
@@ -56,29 +61,6 @@ main = hakyll $ do
       route idRoute
       compile copyFileCompiler
 
-    match "rss.xml" $ route idRoute
-    create "rss.xml" $ requireAll_ "posts/*" >>> renderRss feedConfiguration
-
-    -- Read templates
-    match "templates/*" $ compile templateCompiler
-
-
-
-feedConfiguration :: FeedConfiguration
-feedConfiguration = FeedConfiguration
-    { feedTitle = "pixeldrama - a blog"
-    , feedDescription = "blog of Benjamin Weißenfels"
-    , feedAuthorName = "Benjamin Weißenfels"
-    , feedAuthorEmail = "b.pixeldrama@gmail.com"
-    , feedRoot = "http://pixeldrama.de"
-    }
-
-
--- | Auxiliary compiler: generate a post list from a list of given posts, and
--- add it to the current page under @$posts@
-addPostList :: Compiler (Page String, [Page String]) (Page String)
-addPostList = setFieldA "posts" $
-    arr (reverse . chronological)
-        >>> require "templates/postitem.html" (\p t -> map (applyTemplate t) p)
-        >>> arr mconcat
-        >>> arr pageBody
+postCtx :: Context String
+postCtx =
+  dateField "date" "%B %e, %Y" `mappend` defaultContext

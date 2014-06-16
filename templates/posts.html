@@ -1,4 +1,9 @@
 <h1>All posts</h1>
 <ul>
-    $posts$
+    $for($posts)$
+    <li>
+    <a href="$url$">$title$</a>
+    - <em></em>
+    </li>
+    $endfor$
 </ul>

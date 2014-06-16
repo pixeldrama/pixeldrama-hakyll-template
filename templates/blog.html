@@ -1,7 +1,12 @@
 <div id="posts">
-    <h1>kürzliche Posts</h1>
-    <ul>
-        $posts$
-    </ul>
-    <a href="/posts.html">All posts&hellip;</a>
+  <h1>kürzliche Posts</h1>
+  <ul>
+    $for(posts)$
+      <li>
+	<a href="$url$">$title$</a>
+	- <em></em>
+      </li>      
+      $endfor$
+  </ul>
+  <a href="/posts.html">All posts&hellip;</a>
 </div>
