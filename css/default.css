@@ -35,10 +35,15 @@ div#nav_wrapper {
     display:none
 }
 
+div#navigation {
+    background: url(../images/lambda.svg) no-repeat 0px 3px;
+    background-size: 20px;
+}
+
 div#navigation a, div#footer a {
     text-decoration: none;
     padding: 3px 0px;
-    margin: 0px 20px 0px 0px;
+    margin: 0px 0px 0px 30px;
 }
 
 div#text_wrapper {
