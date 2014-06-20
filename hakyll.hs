@@ -61,6 +61,28 @@ main = hakyll $ do
       route idRoute
       compile copyFileCompiler
 
+    create ["rss.xml"] $ do
+      route idRoute
+      compile $ do
+        loadAllSnapshots "posts/*" "content"
+          >>= fmap (take 10) . recentFirst
+          >>= renderRss (feedConfiguration "posts") feedCtx
+
 postCtx :: Context String
 postCtx =
   dateField "date" "%B %e, %Y" `mappend` defaultContext
+
+feedCtx :: Context String
+feedCtx = mconcat
+    [ bodyField "description"
+    , defaultContext
+    ]
+
+
+feedConfiguration :: String -> FeedConfiguration
+feedConfiguration title = FeedConfiguration
+    { feedTitle = "pixeldrama - " ++ title
+    , feedDescription = "Blog pixeldrama"
+    , feedAuthorName = "Benjamin Weißenfels"
+    , feedRoot = "http://pixeldrama.de"
+    }
