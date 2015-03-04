@@ -51,6 +51,13 @@ div#text_wrapper {
     line-height: 1.6;
 }
 
+pre {
+    padding: 15px;
+    border: 1px solid #DDD;
+    overflow: auto;
+    background: #fff;
+}
+
 div#footer a {
     margin: 0px;
 }
