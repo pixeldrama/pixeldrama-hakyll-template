@@ -31,7 +31,7 @@ main = hakyll $ do
     create ["blog.html"] $ do
       route idRoute
       compile $ do
-        posts <- recentFirst =<< loadAll "posts/*"
+        posts <- return . (take 10) =<< recentFirst =<< loadAll "posts/*"
         let ctx = (listField "posts" postCtx (return posts)) <> postCtx
         makeItem ""
           >>= loadAndApplyTemplate "templates/blog.html" ctx
