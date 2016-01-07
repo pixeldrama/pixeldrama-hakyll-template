@@ -46,7 +46,7 @@ div#navigation a, div#footer a {
     margin: 0px 0px 0px 30px;
 }
 
-div#text_wrapper {
+div#text_wrapper, table {
     font-size: 14px;
     line-height: 1.6;
 }
@@ -58,6 +58,22 @@ pre {
     background: #fff;
 }
 
+table {
+    padding: 0px;
+    border-collapse: collapse;
+}
+
+table td, table th {
+    padding: 15px;
+    border-collapse: collapse;
+    border: 1px solid #DDD;
+}
+
+table thead {
+    background-color: #F2F2F2;
+    text-align: center;
+}
+
 div#footer a {
     margin: 0px;
 }
@@ -66,4 +82,8 @@ div#footer {
     padding: 5px 0 0 0;
     border-top: 1px solid #DDD;
     font-size: 10px;
+}
+
+table {
+    background: white;
 }
